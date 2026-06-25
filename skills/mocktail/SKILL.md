@@ -38,6 +38,9 @@ an *input*. Present the four modes as options (recommend the neutral default):
    radius, spacing, density by eye and set the tokens to match.
 4. **Generated** — hand off to `design-consultation` (when present) to produce a token set.
 
+If a `custom-skins/` folder exists, **check it first** and offer any saved skin that fits before
+rebuilding tokens (see "Saving a custom skin" below).
+
 Skip the question only when the operator already specified a system in the same request.
 
 ## Swappable design system
@@ -54,6 +57,34 @@ override re-skins the whole mock at once.
 When inferring from screenshots, set the token groups in this order: **brand** (the one that matters
 most), then the **ink/bg/line** neutral ramps, then **radius** and **type**. Match density by the
 spacing scale, not by nudging individual paddings.
+
+### Saving a custom skin (for reuse)
+
+A custom skin (modes 2–4: named, inferred, or generated) is real work, so don't let it evaporate
+after one mock. Once the skin is confirmed, **ask the operator whether to save it for reuse** — one
+short question, default yes. Skip this for the neutral default (nothing to save).
+
+If yes, write just the token block (the `:root` overrides, no components) as a standalone skin file:
+
+```
+custom-skins/
+  acme.css      :root { --brand:#0d9488; --brand-hover:#0f766e; --brand-soft:#ccfbf1; ... }
+```
+
+- **Where.** Default to a `custom-skins/` folder in the working repo (next to the mocks). No repo, or
+  the operator wants it machine-wide? Use `~/.custom-skins/`. If neither fits, ask.
+- **Gitignore it.** A saved skin is a local convenience artifact, not source. Add `custom-skins/` to the
+  repo's `.gitignore` when you create it (create the `.gitignore` entry if it's missing).
+- **Reuse it.** A future mock re-skins in one line by linking the skin *after* the kit, so its tokens
+  win the cascade:
+
+  ```html
+  <link rel="stylesheet" href="kit.css">
+  <link rel="stylesheet" href="custom-skins/acme.css">
+  ```
+
+  At the start of a new mock, check `custom-skins/` first. If a saved skin fits what the operator asked
+  for, offer it instead of rebuilding the tokens from scratch.
 
 ## The kit
 
@@ -169,3 +200,6 @@ the one mock and move on. For each piece of feedback:
   split into an optional `conversation.css` so the core stays domain-free. Ships a reusable
   `verify.mjs` steps-driver instead of per-mock temp scripts, and a neutral pattern `gallery.html`
   rather than a domain-specific example.
+- **v1.1** — Custom skins (named / inferred / generated) can be saved for reuse: after a skin is
+  confirmed, offer to write its token block as a standalone `custom-skins/<name>.css` (gitignored),
+  and check `custom-skins/` first on a new mock before rebuilding tokens.
