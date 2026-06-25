@@ -1,0 +1,37 @@
+/* ============================================================
+   conversation.css — OPTIONAL chat/agent add-on for the mocktail kit
+   ------------------------------------------------------------
+   Link this only when a mock is genuinely a conversation (chat
+   thread, assistant, multi-party). The core kit.css presumes no
+   domain; this layers thread + bubble + avatar on top, reading the
+   same tokens so it re-skins with the design system.
+
+     <link rel="stylesheet" href="../kit.css">
+     <link rel="stylesheet" href="../conversation.css">
+
+   Roles are token-driven — override --<role>-bg / --<role>-ink to
+   re-skin per design system.
+   ============================================================ */
+
+:root {
+  --you-bg:var(--brand-soft);   --you-ink:var(--brand-ink);
+  --agent-bg:#f5f3ff;           --agent-ink:#6d28d9;
+  --peer-bg:#f0fdf4;            --peer-ink:#15803d;
+  --system-bg:var(--bg-3);      --system-ink:var(--ink-3);
+}
+
+.thread { display: flex; flex-direction: column; gap: 14px; }
+.turn { display: flex; gap: 11px; align-items: flex-start; max-width: 680px; }
+.turn.me { flex-direction: row-reverse; align-self: flex-end; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center;
+  font-size: var(--fs-200); font-weight: var(--fw-bold); background: var(--brand); color: var(--brand-fg); }
+.bubble { border-radius: var(--r-lg); padding: 11px 14px; font-size: var(--fs-400); line-height: 1.5; color: var(--ink-1); }
+.bubble .name { font-size: var(--fs-100); font-weight: var(--fw-bold); letter-spacing: .03em; text-transform: uppercase;
+  margin-bottom: 4px; opacity: .8; }
+.bubble[data-who="you"]    { background: var(--you-bg);    color: var(--you-ink); }
+.bubble[data-who="agent"]  { background: var(--agent-bg);  --_n: var(--agent-ink); }
+.bubble[data-who="peer"]   { background: var(--peer-bg);   --_n: var(--peer-ink); }
+.bubble[data-who="system"] { background: var(--system-bg); --_n: var(--system-ink); font-size: var(--fs-300); color: var(--ink-2); }
+.bubble .name { color: var(--_n, var(--ink-3)); }
+.turn[data-who="agent"] .avatar { background: var(--agent-ink); }
+.turn[data-who="peer"]  .avatar { background: var(--peer-ink); }

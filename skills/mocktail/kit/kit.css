@@ -1,0 +1,159 @@
+/* ============================================================
+   mocktail kit — a swappable UI design system
+   ------------------------------------------------------------
+   The neutral default look for interactive mocks. The design
+   system is an INPUT: re-skin everything by overriding the :root
+   tokens (named system / brand, inferred from screenshots, or
+   generated). Nothing here is tied to a specific product.
+
+   THE MODEL
+     tokens (:root)         colour / type / radius / elevation
+     app shell              .app .topbar .sidebar .content .panel
+     surfaces               .card .field .input .textarea
+     controls               .btn (+ .primary/.ghost/.role) .chip .pill .kbd
+     feedback               .pstep (ticks) .note
+
+   The core presumes NO domain. Chat/agent primitives (thread, avatar,
+   bubble, conversation roles) live in the optional conversation.css
+   add-on — link it only when a mock is actually a conversation.
+
+   Swap the design system = override the :root tokens (inline on a
+   wrapper, or in the mock's <style>). Components read tokens only —
+   never hard-coded hex — so one override re-skins the whole mock.
+
+   Pair with mock.js for the interaction runtime (cues, typewriter,
+   thinking indicator, staggered reveal, fit-to-window, autoscroll).
+   mock.js injects its own behaviour CSS and reads these tokens.
+   ============================================================ */
+
+:root {
+  /* ---- type ---- */
+  --font-ui:   "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-mono: "SF Mono", "JetBrains Mono", Consolas, monospace;
+  --fs-100:11px; --fs-200:12px; --fs-300:13px; --fs-400:14px; --fs-500:16px; --fs-600:19px; --fs-700:23px;
+  --fw-regular:400; --fw-medium:500; --fw-semibold:600; --fw-bold:700;
+
+  /* ---- brand (the main thing a swap changes) ---- */
+  --brand:#4f46e5; --brand-hover:#4338ca; --brand-fg:#ffffff; --brand-soft:#eef2ff; --brand-ink:#3730a3;
+
+  /* ---- ink + surface (neutral ramp) ---- */
+  --ink-1:#101828; --ink-2:#344054; --ink-3:#667085; --ink-4:#98a2b3;
+  --bg-1:#ffffff; --bg-2:#fbfcfd; --bg-3:#f4f6f8; --bg-4:#eef0f3; --bg-5:#e7eaee;
+  --line-1:#e4e7ec; --line-2:#eef0f3;
+
+  /* ---- status ---- */
+  --success:#0e9f6e; --success-soft:#e6f6ef; --success-ink:#057a55;
+  --danger:#e02424;  --danger-soft:#fdeceb;  --danger-ink:#c81e1e;
+  --warning:#c27803; --warning-soft:#fdf6e3; --warning-ink:#9a6700;
+  --info:#3f83f8;    --info-soft:#ebf2fe;    --info-ink:#1c64f2;
+
+  /* ---- radius + elevation ---- */
+  --r-sm:5px; --r-md:8px; --r-lg:11px; --r-xl:14px; --r-pill:10000px;
+  --shadow-1: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.05);
+  --shadow-2: 0 2px 6px rgba(16,24,40,.06), 0 8px 20px rgba(16,24,40,.08);
+  --shadow-3: 0 12px 36px rgba(16,24,40,.14);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-ui); color: var(--ink-1); -webkit-font-smoothing: antialiased; }
+
+/* ====================== app shell ====================== */
+.app {
+  display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto 1fr;
+  background: var(--bg-3); border: 1px solid var(--line-1); border-radius: var(--r-xl);
+  box-shadow: var(--shadow-2); overflow: hidden;
+}
+.app > .topbar { grid-column: 1 / -1; }
+.topbar {
+  display: flex; align-items: center; gap: 14px; padding: 0 18px; height: 52px;
+  background: var(--bg-1); border-bottom: 1px solid var(--line-1);
+}
+.topbar .brandmark { width: 26px; height: 26px; border-radius: 7px; background: var(--brand);
+  display: grid; place-items: center; color: var(--brand-fg); font-weight: var(--fw-bold); font-size: var(--fs-300); }
+.topbar .product { font-size: var(--fs-400); font-weight: var(--fw-semibold); }
+.topbar .spacer { flex: 1; }
+
+.sidebar {
+  width: 232px; background: var(--bg-2); border-right: 1px solid var(--line-1);
+  padding: 14px 10px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto;
+}
+.sidebar .group { font-size: var(--fs-100); font-weight: var(--fw-bold); letter-spacing: .06em;
+  text-transform: uppercase; color: var(--ink-4); padding: 12px 10px 5px; }
+.navitem {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-md);
+  font-size: var(--fs-400); color: var(--ink-2); cursor: pointer; font-weight: var(--fw-medium);
+}
+.navitem:hover { background: var(--bg-4); }
+.navitem.active { background: var(--brand-soft); color: var(--brand-ink); font-weight: var(--fw-semibold); }
+.navitem .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-4); flex-shrink: 0; }
+.navitem.active .dot { background: var(--brand); }
+
+.content { padding: 22px 26px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
+.content > .head .h { font-size: var(--fs-600); font-weight: var(--fw-bold); }
+.content > .head .sub { font-size: var(--fs-300); color: var(--ink-3); margin-top: 3px; }
+
+/* ====================== surfaces ====================== */
+.card {
+  background: var(--bg-1); border: 1px solid var(--line-1); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-1); padding: 18px; overflow: hidden;
+}
+.card.pad-lg { padding: 22px 24px; }
+.card .card-title { font-size: var(--fs-400); font-weight: var(--fw-semibold); margin-bottom: 4px; }
+.card .card-sub { font-size: var(--fs-300); color: var(--ink-3); }
+.card-actions { display: flex; gap: 10px; margin-top: 16px; align-items: center; }
+
+.panel { background: var(--bg-1); border: 1px solid var(--line-1); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-2); }
+
+/* ====================== controls ====================== */
+.btn {
+  appearance: none; border: 1px solid transparent; cursor: pointer; font-family: inherit;
+  font-size: var(--fs-300); font-weight: var(--fw-semibold); padding: 9px 16px; border-radius: var(--r-md);
+  display: inline-flex; align-items: center; gap: 7px; transition: background .12s ease, box-shadow .12s ease;
+  background: var(--bg-1); color: var(--ink-2); border-color: var(--line-1);
+}
+.btn:hover { background: var(--bg-3); }
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--brand); color: var(--brand-fg); border-color: transparent; box-shadow: var(--shadow-1); }
+.btn.primary:hover { background: var(--brand-hover); }
+.btn.ghost { background: transparent; border-color: transparent; color: var(--ink-2); }
+.btn.ghost:hover { background: var(--bg-4); }
+/* a secondary/iterative action — distinct hue from the primary so two actions never share a colour */
+.btn.role { background: var(--peer-bg); color: var(--peer-ink); border-color: transparent; }
+.btn.danger { background: var(--danger-soft); color: var(--danger-ink); border-color: transparent; }
+.btn.sm { padding: 6px 12px; font-size: var(--fs-200); }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field > label { font-size: var(--fs-200); font-weight: var(--fw-semibold); color: var(--ink-2); }
+.input, .textarea {
+  font-family: inherit; font-size: var(--fs-400); color: var(--ink-1); background: var(--bg-1);
+  border: 1px solid var(--line-1); border-radius: var(--r-md); padding: 10px 12px; width: 100%; resize: none;
+}
+.input:focus, .textarea:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+.input::placeholder, .textarea::placeholder { color: var(--ink-4); }
+
+/* a composer row (input + send) */
+.composer { display: flex; align-items: flex-end; gap: 10px; background: var(--bg-1);
+  border: 1px solid var(--line-1); border-radius: var(--r-lg); padding: 8px 8px 8px 14px; box-shadow: var(--shadow-1); }
+.composer .ce { flex: 1; min-height: 24px; font-size: var(--fs-400); color: var(--ink-1); outline: none; padding: 6px 0; }
+.composer .ce:empty::before { content: attr(data-ph); color: var(--ink-4); }
+
+/* ====================== chips / pills / kbd ====================== */
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-200); font-weight: var(--fw-medium);
+  background: var(--bg-3); color: var(--ink-2); border: 1px solid var(--line-1); border-radius: var(--r-pill); padding: 4px 11px; }
+.pill { display: inline-flex; align-items: center; gap: 5px; font-size: var(--fs-100); font-weight: var(--fw-semibold);
+  border-radius: var(--r-pill); padding: 3px 10px; }
+.pill.green { background: var(--success-soft); color: var(--success-ink); }
+.pill.blue  { background: var(--info-soft);    color: var(--info-ink); }
+.pill.amber { background: var(--warning-soft); color: var(--warning-ink); }
+.pill.rose  { background: var(--danger-soft);  color: var(--danger-ink); }
+.kbd { font-family: var(--font-mono); font-size: var(--fs-100); background: var(--bg-1); color: var(--ink-2);
+  border: 1px solid var(--line-1); border-bottom-width: 2px; border-radius: var(--r-sm); padding: 2px 6px; }
+
+/* ====================== feedback: provisioning ticks ====================== */
+.pstep { display: flex; align-items: center; gap: 10px; font-size: var(--fs-300); color: var(--ink-2); padding: 3px 0; }
+.pstep .ico { width: 16px; height: 16px; flex-shrink: 0; display: grid; place-items: center; }
+.note { font-size: var(--fs-200); color: var(--ink-3); background: var(--bg-2); border: 1px dashed var(--line-1);
+  border-radius: var(--r-md); padding: 8px 11px; }
+
+.muted { color: var(--ink-3); }

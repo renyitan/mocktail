@@ -1,0 +1,14 @@
+{
+  "name": "renyitan",
+  "owner": {
+    "name": "renyitan",
+    "url": "https://github.com/renyitan"
+  },
+  "plugins": [
+    {
+      "name": "mocktail",
+      "source": ".",
+      "description": "Interactive UI mocks on a swappable design system — a clickable HTML state machine (floating cues, typewriter, thinking indicator, staggered reveals, status ticks), re-skinnable by overriding :root tokens."
+    }
+  ]
+}

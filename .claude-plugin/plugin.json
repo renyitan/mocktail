@@ -1,0 +1,11 @@
+{
+  "name": "mocktail",
+  "version": "1.0.0",
+  "description": "Interactive UI mocks on a swappable design system. A self-contained HTML state machine the viewer clicks through — floating cues, typewriter intros, a 'thinking' indicator, staggered reveals, and status ticks — on a design system that's an input (override :root tokens to re-skin), not hardcoded. Interactive mocks only; static diagrams live elsewhere.",
+  "author": {
+    "name": "renyitan",
+    "url": "https://github.com/renyitan"
+  },
+  "homepage": "https://github.com/renyitan/mocktail",
+  "repository": "https://github.com/renyitan/mocktail"
+}

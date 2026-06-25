@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>mocktail · pattern gallery</title>
+<link rel="stylesheet" href="../kit.css">
+<style>
+  /* This page is a CATALOG, not a product. Each tile demonstrates one
+     mechanic in isolation, on the neutral kit. Copy a tile's markup +
+     the matching mock.js call into a real mock. Re-skin by overriding
+     the :root tokens (see the "re-skin" tile). */
+  html, body { height: 100%; background: var(--bg-4); }
+  .stage { position: absolute; inset: 0; display: grid; place-items: center; }
+  #app { width: 1240px; height: 900px; background: var(--bg-3);
+    border: 1px solid var(--line-1); border-radius: var(--r-xl); box-shadow: var(--shadow-2);
+    overflow: hidden; display: flex; flex-direction: column; }
+  .ghead { padding: 20px 26px; background: var(--bg-1); border-bottom: 1px solid var(--line-1); }
+  .ghead .h { font-size: var(--fs-600); font-weight: var(--fw-bold); }
+  .ghead .sub { font-size: var(--fs-300); color: var(--ink-3); margin-top: 3px; }
+  .grid { flex: 1; overflow-y: auto; padding: 22px 26px; display: grid;
+    grid-template-columns: repeat(3, 1fr); gap: 18px; align-content: start; }
+  .tile { background: var(--bg-1); border: 1px solid var(--line-1); border-radius: var(--r-lg);
+    box-shadow: var(--shadow-1); padding: 16px; display: flex; flex-direction: column; gap: 12px; min-height: 150px; }
+  .tile.tall { grid-row: span 2; }
+  .tile .tt { font-size: var(--fs-200); font-weight: var(--fw-bold); letter-spacing: .04em;
+    text-transform: uppercase; color: var(--ink-3); }
+  .tile .demo { flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div id="app">
+      <div class="ghead">
+        <div class="h">mocktail · pattern gallery</div>
+        <div class="sub">Every interaction mechanic in isolation, on the neutral kit. Copy a tile into a real mock; swap <code>:root</code> tokens to re-skin.</div>
+      </div>
+
+      <div class="grid">
+        <!-- primitives: buttons -->
+        <div class="tile">
+          <div class="tt">Buttons · roles</div>
+          <div class="demo">
+            <div class="row">
+              <button class="btn primary">Primary</button>
+              <button class="btn">Default</button>
+              <button class="btn ghost">Ghost</button>
+            </div>
+            <div class="row">
+              <button class="btn role">Secondary</button>
+              <button class="btn danger">Danger</button>
+              <button class="btn sm">Small</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- primitives: chips/pills -->
+        <div class="tile">
+          <div class="tt">Chips · pills</div>
+          <div class="demo">
+            <div class="row">
+              <span class="chip">filter</span>
+              <span class="chip">label</span>
+              <span class="kbd">⌘K</span>
+            </div>
+            <div class="row">
+              <span class="pill green">active</span>
+              <span class="pill blue">info</span>
+              <span class="pill amber">pending</span>
+              <span class="pill rose">error</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- primitives: fields -->
+        <div class="tile">
+          <div class="tt">Fields</div>
+          <div class="demo">
+            <div class="field"><label>Name</label><input class="input" placeholder="metrics-digest"></div>
+            <div class="composer"><div class="ce" data-ph="Composer…"></div><button class="btn primary sm">Send</button></div>
+          </div>
+        </div>
+
+        <!-- Pattern A: floating cue -->
+        <div class="tile">
+          <div class="tt">A · floating cue</div>
+          <div class="demo">
+            <div class="row" style="justify-content:center;padding-top:18px">
+              <span class="cuewrap" id="cueBtn"><button class="btn primary">Click here</button></span>
+            </div>
+            <div class="muted" style="font-size:var(--fs-200);text-align:center">bobbing CTA, CSS arrow (no emoji)</div>
+          </div>
+        </div>
+
+        <!-- Pattern B: typewriter -->
+        <div class="tile">
+          <div class="tt">B · typewriter</div>
+          <div class="demo">
+            <div class="field"><label>Auto-typed prompt</label><input class="input" id="typer" readonly></div>
+            <div class="muted" style="font-size:var(--fs-200)">types char-by-char with caret</div>
+          </div>
+        </div>
+
+        <!-- Pattern E: thinking indicator -->
+        <div class="tile">
+          <div class="tt">E · thinking</div>
+          <div class="demo" id="thinkDemo">
+            <div class="muted" style="font-size:var(--fs-200)">square cluster, never bouncing dots</div>
+          </div>
+        </div>
+
+        <!-- Pattern C: status ticks -->
+        <div class="tile tall">
+          <div class="tt">C · status ticks</div>
+          <div class="demo" id="tickDemo" style="justify-content:flex-start">
+            <div class="pstep run" data-l="Validating connection"><span class="ico"></span><span>Validating connection</span></div>
+            <div class="pstep run" data-l="Provisioning schedule"><span class="ico"></span><span>Provisioning schedule</span></div>
+            <div class="pstep run" data-l="Registering agent"><span class="ico"></span><span>Registering agent</span></div>
+            <div class="pstep run" data-l="Running first preview"><span class="ico"></span><span>Running first preview</span></div>
+            <div class="muted" style="font-size:var(--fs-200);margin-top:6px">running → bare green tick (never circled)</div>
+          </div>
+        </div>
+
+        <!-- Pattern F: staggered reveal -->
+        <div class="tile tall">
+          <div class="tt">F · staggered reveal</div>
+          <div class="demo" id="revealDemo" style="justify-content:flex-start"></div>
+        </div>
+
+        <!-- Pattern G: scale-to-fit (meta) -->
+        <div class="tile">
+          <div class="tt">G · scale-to-fit</div>
+          <div class="demo">
+            <div class="note">This whole frame is built at 1240×900 and scaled to your window by <code>Mock.fit()</code> — never upscaled past 1:1.</div>
+          </div>
+        </div>
+
+        <!-- re-skin proof -->
+        <div class="tile" style="--brand:#0d9488;--brand-hover:#0f766e;--brand-soft:#ccfbf1;--brand-ink:#0f766e">
+          <div class="tt">Re-skin · one override</div>
+          <div class="demo">
+            <div class="row"><button class="btn primary">Teal brand</button><span class="pill green">same kit</span></div>
+            <div class="muted" style="font-size:var(--fs-200)">override 4 brand tokens on a wrapper → re-skinned</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script src="../mock.js"></script>
+<script>
+(function () {
+  Mock.fit('app', { w: 1240, h: 900 });
+
+  // A — a persistent cue on the demo button
+  Mock.cue('cueBtn', 'Press me', 'top');
+
+  // B — typewriter, looping
+  const typer = document.getElementById('typer');
+  (function loopType() {
+    Mock.type(typer, 'Set up a weekly metrics digest', { done: () => setTimeout(() => { typer.value=''; loopType(); }, 1600) });
+  })();
+
+  // E — thinking indicator
+  document.getElementById('thinkDemo').prepend(Mock.thinking('Working on it'));
+
+  // C — ticks, looping
+  const tickSteps = [...document.querySelectorAll('#tickDemo .pstep')];
+  (function loopTicks() {
+    tickSteps.forEach(s => { s.className = 'pstep run'; s.querySelector('.ico').innerHTML = ''; });
+    let i = 0;
+    (function n() { if (i >= tickSteps.length) { setTimeout(loopTicks, 1400); return; }
+      setTimeout(() => { Mock.tick(tickSteps[i]); i++; n(); }, 650); })();
+  })();
+
+  // F — staggered reveal, looping
+  const rd = document.getElementById('revealDemo');
+  (function loopReveal() {
+    rd.innerHTML = '';
+    const data = [['Name','metrics-digest'],['Schedule','Mon · 08:00'],['Source','Analytics DB'],['Delivers','Email + chart']];
+    const rows = data.map(([k,v]) => { const r=document.createElement('div');
+      r.className='pstep'; r.style.borderTop='1px solid var(--line-2)'; r.style.paddingTop='8px';
+      r.innerHTML=`<span class="ico"><span class="vspin"></span></span><span><b style="color:var(--ink-3)">${k}</b> · <span class="rv muted">preparing…</span></span>`;
+      r.dataset.v=v; rd.appendChild(r); return r; });
+    const sty=document.createElement('style'); sty.textContent='.vspin{width:12px;height:12px;border:2px solid var(--line-1);border-top-color:var(--brand);border-radius:50%;display:inline-block;animation:vs .7s linear infinite}@keyframes vs{to{transform:rotate(360deg)}}';
+    rd.appendChild(sty);
+    Mock.reveal(rows, { each:560, gap:140,
+      onEach:(r,p)=>{ if(p==='ready'){ r.querySelector('.ico').innerHTML=Mock.TICK_SVG; r.querySelector('.rv').textContent=r.dataset.v; r.querySelector('.rv').classList.remove('muted'); } },
+      done:()=>setTimeout(loopReveal, 1800) });
+  })();
+})();
+</script>
+</body>
+</html>
