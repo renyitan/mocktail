@@ -1,13 +1,12 @@
-# mocktail
+# 🍹 Mocktail
 
-> Create interactive mocks on Copilot CLI and Claude Code, re-skinnable to any brand or design system.
+> Mix ideas into interactive mocks.
 
-A mock is a single self-contained `index.html`: a small JS state machine the viewer
-clicks through, so a flow *responds* before anyone builds the real thing. Buttons advance
-state, a floating cue always points at the next click, and there's no backend to wire up.
+Mocktail helps agents turn ideas, documents, PRDs, and conversations into interactive mocks.
 
-The look is an **input, not a default**. Every component reads `:root` tokens, so one edit
-re-skins the whole mock. Hand it a brand, a screenshot to match, or keep the neutral kit.
+Each mock is a single self-contained `index.html` that people can click through. Screens respond to actions, flows progress naturally, and a floating cue guides viewers through the experience. No backend required.
+
+The look and feel is completely customizable. Change a few design tokens and the same mock can match a startup landing page, an enterprise dashboard, or an existing product design system.
 
 ## Install
 
@@ -16,68 +15,90 @@ re-skins the whole mock. Hand it a brand, a screenshot to match, or keep the neu
 /plugin install mocktail@renyitan
 ```
 
-That's it. The skill is now available to any agent in that CLI. Update later with
-`/plugin marketplace update`.
+That's it. Mocktail is now available to any agent in your CLI.
 
-Prefer a manifest dependency? Pin it directly:
+Update later with:
+
+```shell
+/plugin marketplace update
+```
+
+Or pin it as a dependency:
 
 ```json
-{ "dependencies": ["github:renyitan/mocktail"] }
+{
+  "dependencies": ["github:renyitan/mocktail"]
+}
 ```
 
-## Use it
+## Use It
 
-Just ask in plain language:
+Describe what you want in plain language:
 
-```
-make an interactive mock of this doc
+```text
+make an interactive mock of this document
+
+create a prototype for a customer onboarding flow
+
 mock what we just discussed
+
+turn this PRD into a clickable experience
 ```
 
-## What you get
+The agent generates a standalone mock that can be shared, reviewed, and iterated on immediately.
 
-Eight interaction patterns, all provided as helpers so the agent calls them instead of
-re-implementing the mechanics:
+## What You Get
 
-- **Floating CTA cue** that always shows where to click next
-- **Typewriter intros** and a **"thinking" indicator** for agent-style flows
-- **Status ticks** that spin then resolve, and **staggered reveals** for preview rows
-- **Scale-to-fit** and **feed auto-scroll** so it reads right at any window size
+* Clickable, multi-step user flows
+* A floating cue that guides viewers through the experience
+* Agent-style interactions such as typing, thinking, and status updates
+* Responsive layouts that scale to fit the viewport
+* A single self-contained `index.html`
 
-## Re-skin in one edit
+## Re-skin in One Edit
 
 ```html
-<!-- same kit, different brand -->
-<div class="app" style="--brand:#0d9488; --brand-hover:#0f766e; --brand-soft:#ccfbf1">
+<div
+  class="app"
+  style="
+    --brand:#0d9488;
+    --brand-hover:#0f766e;
+    --brand-soft:#ccfbf1;
+  "
+>
 ```
 
-Override the brand, ink, and radius tokens and the whole mock follows. Chat primitives
-(thread, avatar, bubble) live in an optional `conversation.css`, so a mock that isn't a
-conversation carries none of that weight.
+Override a few design tokens and the entire experience follows.
 
-## Layout
+Colors, typography, spacing, radius, and component styling all derive from shared tokens. Conversation-specific primitives (avatars, bubbles, threads, agent messages) live in an optional `conversation.css`, so non-conversational mocks stay lightweight.
 
-```
+## Project Layout
+
+```text
 .claude-plugin/        plugin + marketplace manifests
+
 skills/mocktail/
-  SKILL.md             the full technique (rules, patterns, gotchas)
-  kit/
-    kit.css            design tokens + neutral components
-    mock.js            the interaction runtime (patterns as helpers)
-    conversation.css   optional chat/agent add-on
-    render.mjs         offline PNG renderer
-    verify.mjs         drives a mock through a steps file, shoots each state
-    examples/          neutral pattern gallery to copy from
+├── SKILL.md           Authoring patterns, rules, and guidance
+└── kit/
+    ├── kit.css        Design tokens and neutral components
+    ├── mock.js        Interaction runtime
+    ├── conversation.css
+    ├── render.mjs     Offline PNG renderer
+    ├── verify.mjs     State verification and screenshot capture
+    └── examples/      Reference patterns and templates
 ```
 
-## Render offline (optional)
+## Offline Rendering (Optional)
 
-Rendering normally runs through the Playwright MCP. For a standalone render:
+Mocktail normally renders through the Playwright MCP.
 
 ```bash
-cd skills/mocktail && npm i playwright && npx playwright install chromium
+cd skills/mocktail
+
+npm i playwright
+npx playwright install chromium
+
 node kit/render.mjs kit/examples/gallery.html "#app" out.png 2
+
 node kit/verify.mjs <mock.html> <mock.steps.json> ./states 2
 ```
-
-`node_modules/` is git-ignored. `package.json` pins the dependency for a reproducible render.
