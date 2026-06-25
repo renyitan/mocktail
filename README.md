@@ -27,11 +27,8 @@ Prefer a manifest dependency? Pin it directly:
 
 ## Use it
 
-Once installed, just ask in plain language:
-
-> make an interactive mock of this doc
-> mock what we just discussed
-> turn this into a clickable prototype
+Just ask in plain language, e.g. *"make an interactive mock of this doc"* or
+*"mock what we just discussed"*.
 
 The agent confirms the look first (neutral default, a named system like Material 3, or a
 palette read off a screenshot you send), then builds the mock and walks you through it.
