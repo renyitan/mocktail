@@ -34,9 +34,6 @@ make an interactive mock of this doc
 mock what we just discussed
 ```
 
-The agent confirms the look first (neutral default, a named system like Material 3, or a
-palette read off a screenshot you send), then builds the mock and walks you through it.
-
 ## What you get
 
 Eight interaction patterns, all provided as helpers so the agent calls them instead of
