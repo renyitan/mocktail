@@ -27,11 +27,11 @@ Prefer a manifest dependency? Pin it directly:
 
 ## Use it
 
-Once installed, just ask:
+Once installed, just ask in plain language:
 
-> mock up the onboarding flow
-> make a clickable prototype of this screen
-> show me how this would feel
+> make an interactive mock of this doc
+> mock what we just discussed
+> turn this into a clickable prototype
 
 The agent confirms the look first (neutral default, a named system like Material 3, or a
 palette read off a screenshot you send), then builds the mock and walks you through it.
