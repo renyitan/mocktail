@@ -1,64 +1,85 @@
 # mocktail
 
-A **plugin** for Copilot CLI and Claude Code that makes interactive UI mocks. Think clickable, animated prototypes for
-feeling out a flow before anyone builds it. Each one is a single self-contained `index.html` driven
-by a tiny JS state machine, on a **swappable design system**. The look is an *input* you set by
-overriding `:root` tokens, not something hardcoded.
+> Clickable UI mocks for Copilot CLI and Claude Code. Re-skinnable to any brand.
 
-The skill (`skills/mocktail/SKILL.md`) carries the full technique. In short:
+A mock is a single self-contained `index.html`: a small JS state machine the viewer
+clicks through, so a flow *responds* before anyone builds the real thing. Buttons advance
+state, a floating cue always points at the next click, and there's no backend to wire up.
 
-- **Two rules.** Disambiguate before building, and always float a cue showing where to click next.
-- **The kit** (`skills/mocktail/kit/`) is a neutral, token-driven design system (`kit.css`), an
-  interaction runtime (`mock.js`) exposing the patterns as helpers, an optional chat add-on
-  (`conversation.css`), offline renderers (`render.mjs` plus a reusable `verify.mjs` steps-driver),
-  and a neutral pattern catalog (`examples/gallery.html`) to copy from.
-- **Swappable look.** Re-skin in one edit by overriding the brand, ink, and radius tokens. Point them
-  at a named system, values read off a screenshot, a generated palette, or just keep the default.
+The look is an **input, not a default**. Every component reads `:root` tokens, so one edit
+re-skins the whole mock. Hand it a brand, a screenshot to match, or keep the neutral kit.
 
-This repo is the canonical home, and it's meant to be used by more than one agent. Keep it neutral.
-Product-specific looks belong in the consumer's skin, not here.
-
-## Install / consume
-
-This repo is both the **plugin** and a single-plugin **marketplace** (it carries
-`.claude-plugin/marketplace.json`). Consume it the native Copilot/Claude Code way:
+## Install
 
 ```shell
 /plugin marketplace add renyitan/mocktail
 /plugin install mocktail@renyitan
 ```
 
-The CLI copies the plugin into its plugin cache and tracks it in `config.json`. Refresh later with
-`/plugin marketplace update`. The skill is then available to whatever agent runs in that CLI.
+That's it. The skill is now available to any agent in that CLI. Update later with
+`/plugin marketplace update`.
 
-To give it your own design system, override the `:root` tokens with a brand skin, and optionally
-layer a chrome add-on the way `conversation.css` does. The mechanics stay shared. Only the look
-changes per consumer.
-
-### As a git dependency
-
-A plugin or agency manifest can also pull it in directly:
+Prefer a manifest dependency? Pin it directly:
 
 ```json
 { "dependencies": ["github:renyitan/mocktail"] }
 ```
 
-## Render & verify
+## Use it
 
-The skill is self-contained and rendering is optional (Playwright MCP is the primary path). For the
-offline path:
+Once installed, just ask:
+
+> mock up the onboarding flow
+> make a clickable prototype of this screen
+> show me how this would feel
+
+The agent confirms the look first (neutral default, a named system like Material 3, or a
+palette read off a screenshot you send), then builds the mock and walks you through it.
+
+## What you get
+
+Eight interaction patterns, all provided as helpers so the agent calls them instead of
+re-implementing the mechanics:
+
+- **Floating CTA cue** that always shows where to click next
+- **Typewriter intros** and a **"thinking" indicator** for agent-style flows
+- **Status ticks** that spin then resolve, and **staggered reveals** for preview rows
+- **Scale-to-fit** and **feed auto-scroll** so it reads right at any window size
+
+## Re-skin in one edit
+
+```html
+<!-- same kit, different brand -->
+<div class="app" style="--brand:#0d9488; --brand-hover:#0f766e; --brand-soft:#ccfbf1">
+```
+
+Override the brand, ink, and radius tokens and the whole mock follows. Chat primitives
+(thread, avatar, bubble) live in an optional `conversation.css`, so a mock that isn't a
+conversation carries none of that weight.
+
+## Layout
+
+```
+.claude-plugin/        plugin + marketplace manifests
+skills/mocktail/
+  SKILL.md             the full technique (rules, patterns, gotchas)
+  kit/
+    kit.css            design tokens + neutral components
+    mock.js            the interaction runtime (patterns as helpers)
+    conversation.css   optional chat/agent add-on
+    render.mjs         offline PNG renderer
+    verify.mjs         drives a mock through a steps file, shoots each state
+    examples/          neutral pattern gallery to copy from
+```
+
+## Render offline (optional)
+
+Rendering normally runs through the Playwright MCP. For a standalone render:
 
 ```bash
 cd skills/mocktail && npm i playwright && npx playwright install chromium
 node kit/render.mjs kit/examples/gallery.html "#app" out.png 2
-node kit/verify.mjs <mock.html> <mock.steps.json> ~/Desktop/mock-states 2
+node kit/verify.mjs <mock.html> <mock.steps.json> ./states 2
 ```
 
-`node_modules/` is git-ignored, and `package.json` pins the dep for a reproducible offline render.
-
-## Design notes
-
-Built from scratch as a neutral, re-skinnable kit. The defining choice is that the design system is
-an input rather than something hardcoded, so the same mock can wear any look you hand it. Chat and
-agent primitives are kept out of the core and live in the optional `conversation.css`, so a mock
-that isn't a conversation carries none of that weight.
+`node_modules/` is git-ignored. `package.json` pins the dependency for a reproducible render.
