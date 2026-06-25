@@ -1,6 +1,6 @@
 # mocktail
 
-> Clickable UI mocks for Copilot CLI and Claude Code. Re-skinnable to any brand.
+> Create interactive mocks on Copilot CLI and Claude Code, re-skinnable to any brand or design system.
 
 A mock is a single self-contained `index.html`: a small JS state machine the viewer
 clicks through, so a flow *responds* before anyone builds the real thing. Buttons advance
